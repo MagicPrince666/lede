@@ -314,6 +314,8 @@ platform_check_image() {
 	whr-hp-gn|\
 	wlae-ag300n|\
 	wndap360|\
+	xag9342-8M|\
+	xag9342|\
 	wpj342|\
 	wpj344|\
 	wpj531|\

@@ -1251,6 +1251,33 @@ define Device/wlr8100
 endef
 TARGET_DEVICES += wlr8100
 
+define Device/xag-8m
+  DEVICE_PACKAGES := kmod-usb-core kmod-usb2 kmod-usb-acm kmod-video-core kmod-video-uvc kmod-ath-hs-uart
+  MTDPARTS := spi0.0:192k(u-boot)ro,7936k(firmware),64k(art)
+  IMAGE_SIZE := 7936k
+endef
+
+define Device/xag-16m
+  DEVICE_PACKAGES := kmod-usb-core kmod-usb2 kmod-usb-acm kmod-video-core kmod-video-uvc kmod-ath-hs-uart
+  MTDPARTS := spi0.0:192k(u-boot)ro,16128k(firmware),64k(art)
+  IMAGE_SIZE := 16128k
+endef
+
+define Device/xag9342-8M
+  $(Device/xag-8m)
+  DEVICE_TITLE := XAG XLinkHS (8MB flash)
+  BOARDNAME := XAG9342
+endef
+TARGET_DEVICES += xag9342-8M
+
+define Device/xag9342
+  $(Device/xag-16m)
+  DEVICE_TITLE := XAG XLinkHS (16MB flash)
+  BOARDNAME := XAG9342
+  SUPPORTED_DEVICES := xag9342
+endef
+TARGET_DEVICES += xag9342
+
 define Device/wpj-16m
   DEVICE_PACKAGES := kmod-usb-core kmod-usb2 kmod-usb-ledtrig-usbport
   MTDPARTS := spi0.0:192k(u-boot)ro,16128k(firmware),64k(art)ro

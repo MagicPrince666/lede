@@ -360,6 +360,7 @@ enum ath79_mach_type {
 	ATH79_MACH_WNR612_V2,			/* NETGEAR WNR612 v2 */
 	ATH79_MACH_WP543,			/* Compex WP543 */
 	ATH79_MACH_WPE72,			/* Compex WPE72 */
+	ATH79_MACH_XAG9342,			/* XAG XLINKHS */
 	ATH79_MACH_WPJ342,			/* Compex WPJ342 */
 	ATH79_MACH_WPJ344,			/* Compex WPJ344 */
 	ATH79_MACH_WPJ531,			/* Compex WPJ531 */

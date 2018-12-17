@@ -542,6 +542,12 @@ ar71xx_setup_interfaces()
 		ucidef_add_switch "switch0" \
 			"0@eth0" "1:lan" "2:wan"
 		;;
+	xag9342-8M)
+		ucidef_set_interfaces_lan_wan "eth0" "eth0.1"
+		;;
+	xag9342)
+		ucidef_set_interfaces_lan_wan "eth0" "eth0.1"
+		;;
 	wndr3700|\
 	wndr3700v2|\
 	wndr3800|\

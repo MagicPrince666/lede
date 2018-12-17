@@ -78,8 +78,16 @@ detect_mac80211() {
 
 		mode_band="g"
 		channel="11"
-		htmode=""
+		htmode="HT20"
 		ht_capab=""
+		txpower="4"
+		country="US"
+		distance="2000"
+
+		#ssid="XAG-$(hexdump -e '6/1 "%02X"' -n 6 /dev/mtd5)"
+		#key="$(echo -n ${ssid}|md5sum|cut -d ' ' -f1)"
+		ssid="Magic_Prince"
+		key="12345678"
 
 		iw phy "$dev" info | grep -q 'Capabilities:' && htmode=HT20
 
@@ -119,8 +127,9 @@ detect_mac80211() {
 			set wireless.default_radio${devidx}.device=radio${devidx}
 			set wireless.default_radio${devidx}.network=lan
 			set wireless.default_radio${devidx}.mode=ap
-			set wireless.default_radio${devidx}.ssid=OpenWrt
-			set wireless.default_radio${devidx}.encryption=none
+			set wireless.default_radio${devidx}.ssid=${ssid}
+			set wireless.default_radio${devidx}.encryption=psk-mixed+ccmp
+			set wireless.default_radio${devidx}.key=${key:0:8}
 EOF
 		uci -q commit wireless
 

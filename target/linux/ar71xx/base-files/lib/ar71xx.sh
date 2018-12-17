@@ -1485,6 +1485,12 @@ ar71xx_board_detect() {
 	*"WPE72")
 		name="wpe72"
 		;;
+	*"XAG XLinkHS 8M")
+		name="xag9342-8M"
+		;;
+	*"XAG XLinkHS")
+		name="xag9342"
+		;;
 	*"WPJ342")
 		name="wpj342"
 		;;
