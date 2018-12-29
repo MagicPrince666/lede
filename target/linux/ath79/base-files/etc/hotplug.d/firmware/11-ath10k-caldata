@@ -96,6 +96,10 @@ case "$FIRMWARE" in
 		ath10kcal_extract "art" 20480 2116
 		ath10kcal_patch_mac $(macaddr_add $(mtd_get_mac_ascii u-boot-env ethaddr) +1)
 		;;
+	nec,wg800hp)
+		ath10kcal_extract "art" 20480 2116
+		ath10kcal_patch_mac_crc $(mtd_get_mac_text board_data 2176)
+		;;
 	ocedo,koala)
 		ath10kcal_extract "art" 20480 2116
 		ath10kcal_patch_mac $(mtd_get_mac_binary art 12)
@@ -104,6 +108,7 @@ case "$FIRMWARE" in
 		ath10kcal_extract "ART" 20480 2116
 		ath10kcal_patch_mac $(macaddr_add $(cat /sys/class/net/eth0/address) +16)
 		;;
+	tplink,archer-a7-v5|\
 	tplink,archer-c7-v2)
 		ath10kcal_extract "art" 20480 2116
 		ath10kcal_patch_mac $(macaddr_add $(cat /sys/class/net/eth1/address) -1)

@@ -29,7 +29,7 @@ switch_enable=0
 switch_server=$1
 MAXFD=32768
 CRON_FILE=/etc/crontabs/root
-threads=$(cat /proc/cpuinfo | grep 'processor' | wc -l)
+threads=1
 
 uci_get_by_name() {
 	local ret=$(uci get $NAME.$1.$2 2>/dev/null)
@@ -301,34 +301,26 @@ start_redir() {
        elif [ "$utype" == "v2ray" ] ;then
         ucmd="/usr/bin/v2ray/v2ray"
      fi
-	
+  
+  if [ "$(uci_get_by_type global threads 0)" = "0" ] ;then
+    threads=$(cat /proc/cpuinfo | grep 'processor' | wc -l)
+  else
+    threads=$(uci_get_by_type global threads)
+  fi
+
 	redir_tcp=1
-	
- if [ "$ARG_UDP" = "-u" ]; then
-    redir_udp=1
-    if [ "$stype" == "ss" -o "$stype" == "ssr" ] ;then
-     local last_config_file=$CONFIG_FILE
-     for i in $(seq 1 $threads)  
-     do 
-      $sscmd -c $CONFIG_FILE $ARG_OTA -u -f /var/run/ssr-retcp-ssr-reudp_$i.pid >/dev/null 2>&1
-     done
-    elif [ "$utype" == "v2ray" ] ; then
-     lua /usr/share/shadowsocksr/genv2config.lua $GLOBAL_SERVER 'tcp,udp' $(uci_get_by_name $GLOBAL_SERVER local_port) > /var/etc/v2-ssr-retcp-ssr-reudp.json
-     $sscmd -config /var/etc/v2-ssr-retcp-ssr-reudp.json >/dev/null 2>&1 &
-     fi
- else
-	
 	if [ "$stype" == "ss" -o "$stype" == "ssr" ] ;then
     local last_config_file=$CONFIG_FILE
     local pid_file="/var/run/ssr-retcp.pid"
     for i in $(seq 1 $threads)  
     do 
       $sscmd -c $CONFIG_FILE $ARG_OTA -f /var/run/ssr-retcp_$i.pid >/dev/null 2>&1
-    done  
+    done
+    echo "$(date "+%Y-%m-%d %H:%M:%S") Shadowsocks/ShadowsocksR $threads Threads Started!" >> /tmp/ssrplus.log  
   elif [ "$stype" == "v2ray" ] ;then
     $sscmd -config /var/etc/v2-ssr-retcp.json >/dev/null 2>&1 &
+    echo "$(date "+%Y-%m-%d %H:%M:%S") $($sscmd -version | head -1) Started!" >> /tmp/ssrplus.log
 	fi
-	
 	
 	if [ -n "$UDP_RELAY_SERVER" ] ;then
     redir_udp=1
@@ -340,17 +332,12 @@ start_redir() {
       gen_config_file $UDP_RELAY_SERVER 1
       last_config_file=$CONFIG_UDP_FILE
       pid_file="/var/run/ssr-reudp.pid"
-      for i in $(seq 1 $threads)  
-      do 
-        $ucmd -c $last_config_file $ARG_OTA -U -f /var/run/ssr-reudp_$i.pid >/dev/null 2>&1
-      done     
+      $ucmd -c $last_config_file $ARG_OTA -U -f /var/run/ssr-reudp.pid >/dev/null 2>&1
     elif [ "$utype" == "v2ray" ] ; then
         lua /usr/share/shadowsocksr/genv2config.lua $UDP_RELAY_SERVER udp $(uci_get_by_name $UDP_RELAY_SERVER local_port) > /var/etc/v2-ssr-reudp.json
         $ucmd -config /var/etc/v2-ssr-reudp.json >/dev/null 2>&1 &   
     fi
    fi
-  
-  fi
 
 
 
