@@ -100,7 +100,7 @@ static struct at803x_platform_data mi124_ar8035_data = {
 static struct mdio_board_info mi124_mdio0_info[] = {
         {
                 .bus_id = "ar71xx-mdio.0",
-                .phy_addr = 0,
+                .mdio_addr = 0,
                 .platform_data = &mi124_ar8035_data,
         },
 };
