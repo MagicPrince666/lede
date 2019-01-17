@@ -20,8 +20,8 @@
 #include <dt-bindings/soc/qcom,tcsr.h>
 
 / {
-	model = "ASUS RT-AC58U";
-	compatible = "asus,rt-ac58u", "qcom,ipq4019";
+	model = "Linksys EA6350v3";
+	compatible = "linksys,ea6350v3", "qcom,ipq4019";
 
 	memory {
 		device_type = "memory";
@@ -88,12 +88,12 @@
 
 		wifi@a000000 {
 			status = "okay";
-			qcom,ath10k-calibration-variant = "RT-AC58U";
+			qcom,ath10k-calibration-variant = "linksys-ea6350v3";
 		};
 
 		wifi@a800000 {
 			status = "okay";
-			qcom,ath10k-calibration-variant = "RT-AC58U";
+			qcom,ath10k-calibration-variant = "linksys-ea6350v3";
 		};
 
 		watchdog@b017000 {
@@ -114,13 +114,13 @@
 
 		reset {
 			label = "reset";
-			gpios = <&tlmm 4 GPIO_ACTIVE_LOW>;
+			gpios = <&tlmm 63 GPIO_ACTIVE_LOW>;
 			linux,code = <KEY_RESTART>;
 		};
 
 		wps {
 			label = "wps";
-			gpios = <&tlmm 63 GPIO_ACTIVE_LOW>;
+			gpios = <&tlmm 0 GPIO_ACTIVE_LOW>;
 			linux,code = <KEY_WPS_BUTTON>;
 		};
 	};
@@ -130,31 +130,6 @@
 
 		power: status {
 			label = "rt-ac58u:blue:status";
-			gpios = <&tlmm 3 GPIO_ACTIVE_HIGH>;
-		};
-
-		wan {
-			label = "rt-ac58u:blue:wan";
-			gpios = <&tlmm 1 GPIO_ACTIVE_HIGH>;
-		};
-
-		wlan2G {
-			label = "rt-ac58u:blue:wlan2G";
-			gpios = <&tlmm 58 GPIO_ACTIVE_HIGH>;
-		};
-
-		wan5G {
-			label = "rt-ac58u:blue:wlan5G";
-			gpios = <&tlmm 5 GPIO_ACTIVE_HIGH>;
-		};
-
-		usb {
-			label = "rt-ac58u:blue:usb";
-			gpios = <&tlmm 0 GPIO_ACTIVE_HIGH>;
-		};
-
-		lan {
-			label = "rt-ac58u:blue:lan";
 			gpios = <&tlmm 2 GPIO_ACTIVE_HIGH>;
 		};
 	};
@@ -241,47 +216,54 @@
 				read-only;
 			};
 			partition4@d0000 {
-				label = "DDRPARAMS";
+				label = "APPSBLENV";
 				reg = <0x000d0000 0x00010000>;
 				read-only;
 			};
 			partition5@e0000 {
-				label = "APPSBLENV"; /* uboot env*/
-				reg = <0x000e0000 0x00010000>;
-				read-only;
-			};
-			partition5@f0000 {
 				label = "APPSBL"; /* uboot */
-				reg = <0x000f0000 0x00080000>;
+				reg = <0x000e0000 0x00080000>;
 				read-only;
 			};
-			partition5@170000 {
+			partition6@160000 {
 				label = "ART";
-				reg = <0x00170000 0x00010000>;
+				reg = <0x00160000 0x00010000>;
 				read-only;
 			};
-			/* 0x00180000 - 0x00200000 unused */
-		};
-	};
-
-	mt29f@1 {
-		#address-cells = <1>;
-		#size-cells = <0>;
-		compatible = "spinand,mt29f";
-		reg = <1>;
-		spi-max-frequency = <24000000>;
-
-		partitions {
-			compatible = "fixed-partitions";
-			#address-cells = <1>;
-			#size-cells = <1>;
-
-			partition0@0 {
-				label = "ubi";
-				reg = <0x00000000 0x08000000>;
+			partition7@170000 {
+				label = "u_env";
+				reg = <0x00170000 0x00020000>;
 			};
+			partition8@190000 {
+				label = "s_env";
+				reg = <0x00190000 0x00020000>;
+			};
+			partition9@1b0000 {
+				label = "devinfo";
+				reg = <0x001b0000 0x00010000>;
+			};
+			/* 0x001c0000 - 0x00200000 unused */
 		};
 	};
+	mt29f@1 {
+                status = "okay";
+                #address-cells = <1>;
+                #size-cells = <0>;
+                compatible = "spinand,mt29f", "w25n01gv";
+                reg = <1>;
+                spi-max-frequency = <24000000>;
+                partitions {
+                        compatible = "fixed-partitions";
+                        #address-cells = <1>;
+                        #size-cells = <1>;
+			partition0@0 {
+                                label = "ubi";
+                                reg = <0x00000000 0x08000000>;
+                        };
+
+                };
+        };
+
 };
 
 &usb3_ss_phy {
