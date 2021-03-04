@@ -607,6 +607,15 @@ define Device/widora_neo-32m
 endef
 TARGET_DEVICES += widora_neo-32m
 
+define Device/widora_bit5-32m
+  IMAGE_SIZE := 32448k
+  DEVICE_VENDOR := Widora
+  DEVICE_MODEL := Widora-BIT5
+  DEVICE_VARIANT := 32M
+  DEVICE_PACKAGES := kmod-usb2 kmod-usb-ohci
+endef
+TARGET_DEVICES += widora_bit5-32m
+
 define Device/wiznet_wizfi630s
   IMAGE_SIZE := 32448k
   DEVICE_VENDOR := WIZnet
