@@ -57,11 +57,13 @@ case "$FIRMWARE" in
 	ezviz,cs-w3-wd1200g-eup |\
 	glinet,gl-b1300 |\
 	linksys,ea6350v3 |\
-	mobipromo,cm520-79f |\
 	p2w,r619ac |\
 	p2w,r619ac-128m |\
 	qcom,ap-dk01.1-c1)
 		caldata_extract "ART" 0x1000 0x2f20
+		;;
+	mobipromo,cm520-79f)
+		caldata_extract "ART" 4096 12064
 		;;
 	aruba,ap-303 |\
 	aruba,ap-303h |\
@@ -150,11 +152,13 @@ case "$FIRMWARE" in
 	ezviz,cs-w3-wd1200g-eup |\
 	glinet,gl-b1300 |\
 	linksys,ea6350v3 |\
-	mobipromo,cm520-79f |\
 	p2w,r619ac |\
 	p2w,r619ac-128m |\
 	qcom,ap-dk01.1-c1)
 		caldata_extract "ART" 0x5000 0x2f20
+		;;
+	mobipromo,cm520-79f)
+		caldata_extract "ART" 20480 12064
 		;;
 	aruba,ap-303 |\
 	aruba,ap-303h |\

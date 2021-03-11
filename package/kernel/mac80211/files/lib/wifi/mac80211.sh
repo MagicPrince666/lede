@@ -85,12 +85,13 @@ detect_mac80211() {
 
 		#ssid="XAG-$(hexdump -e '6/1 "%02X"' -n 6 /dev/mtd5)"
 		#key="$(echo -n ${ssid}|md5sum|cut -d ' ' -f1)"
-		ssid="Magic_Prince"
+		ssid="Prince_Openwrt_2.4G"
 		key="12345678"
 
 		iw phy "$dev" info | grep -q 'Capabilities:' && htmode=HT20
 
 		iw phy "$dev" info | grep -q '\* 5... MHz \[' && {
+			ssid="Prince_Openwrt_5G"
 			mode_band="a"
 			channel=$(iw phy "$dev" info | grep '\* 5... MHz \[' | grep '(disabled)' -v -m 1 | sed 's/[^[]*\[\|\].*//g')
 			iw phy "$dev" info | grep -q 'VHT Capabilities' && htmode="VHT80"
