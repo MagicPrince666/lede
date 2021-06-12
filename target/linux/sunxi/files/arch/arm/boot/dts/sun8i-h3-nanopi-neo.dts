@@ -1,0 +1,219 @@
+/*
+ * Copyright (C) 2016 James Pettigrew <james@innovum.com.au>
+ *
+ * This file is dual-licensed: you can use it either under the terms
+ * of the GPL or the X11 license, at your option. Note that this dual
+ * licensing only applies to this file, and not this project as a
+ * whole.
+ *
+ *  a) This file is free software; you can redistribute it and/or
+ *     modify it under the terms of the GNU General Public License as
+ *     published by the Free Software Foundation; either version 2 of the
+ *     License, or (at your option) any later version.
+ *
+ *     This file is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ * Or, alternatively,
+ *
+ *  b) Permission is hereby granted, free of charge, to any person
+ *     obtaining a copy of this software and associated documentation
+ *     files (the "Software"), to deal in the Software without
+ *     restriction, including without limitation the rights to use,
+ *     copy, modify, merge, publish, distribute, sublicense, and/or
+ *     sell copies of the Software, and to permit persons to whom the
+ *     Software is furnished to do so, subject to the following
+ *     conditions:
+ *
+ *     The above copyright notice and this permission notice shall be
+ *     included in all copies or substantial portions of the Software.
+ *
+ *     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ *     EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ *     OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ *     NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ *     HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ *     WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ *     FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ *     OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+#include "sun8i-h3-nanopi.dtsi"
+#include <dt-bindings/pwm/pwm.h>
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/input/input.h>
+
+/ {
+	model = "Prince NanoPi NEO";
+	compatible = "friendlyarm,nanopi-neo", "allwinner,sun8i-h3";
+
+	aliases {
+		serial0 = &uart0;
+		serial1 = &uart1;
+	};
+
+	chosen {
+		stdout-path = "serial0:115200n8";
+		/delete-node/ framebuffer@0;
+	};
+
+	leds {
+		compatible = "gpio-leds";
+
+		status {
+			label = "nanopi:blue:status";
+			gpios = <&pio 0 10 GPIO_ACTIVE_HIGH>;
+			linux,default-trigger = "heartbeat";
+		};
+
+		pwr {
+			label = "nanopi:green:pwr";
+			gpios = <&r_pio 0 10 GPIO_ACTIVE_HIGH>;
+			default-state = "on";
+			linux,default-trigger = "timer";
+		};
+	};
+
+	gpio-keys {
+		compatible = "gpio-keys";
+		#address-cells = <1>;
+		#size-cells = <0>;
+		autorepeat;
+
+		switch@1 {
+			label = "key1";
+			linux,code = <101>;
+			interrupt-parent = <&pio>;
+			interrupts = <0 2 IRQ_TYPE_EDGE_BOTH>;//PA2
+		};
+
+		switch@2 {
+			label = "key2";
+			linux,code = <102>;
+			interrupt-parent = <&pio>;
+			interrupts = <0 3 IRQ_TYPE_EDGE_BOTH>;//PA3
+		};
+
+		switch@3 {
+			label = "key3";
+			linux,code = <103>;
+			interrupt-parent = <&pio>;
+			interrupts = <0 0 IRQ_TYPE_EDGE_BOTH>;//PA0
+		};
+	};
+
+	backlight: backlight {
+/*
+		compatible = "pwm-backlight";
+		pwms = <&pwm 0 50000 PWM_POLARITY_INVERTED>;
+		enable-gpios = <&pio 6 9 GPIO_ACTIVE_HIGH>;
+
+		brightness-levels = <0 1 2 4 8 16 32 64 128 255>;
+		default-brightness-level = <9>;
+*/
+		compatible = "gpio-backlight";
+		gpios = <&pio 6 9 GPIO_ACTIVE_HIGH>;
+		default-on;
+		status = "okay";
+	};
+};
+
+&uart0 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart0_pa_pins>;
+	status = "okay";
+};
+
+&uart1 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart1_pins>;
+	status = "okay";
+};
+
+&ehci0 {
+	status = "okay";
+};
+
+&spi0 {
+	#address-cells = <1>;
+	#size-cells = <0>;
+    pinctrl-names = "default";
+    pinctrl-0 = <&spi0_pins &spi0_pins_cs1>;
+	spi-num-chipselects = <2>;
+	cs-gpios = <&pio 2 3 GPIO_ACTIVE_HIGH>, <&pio 0 3 GPIO_ACTIVE_HIGH>;
+    status = "okay";
+
+	ili9341@0 {
+		compatible = "ilitek,ili9341";
+		reg = <0>;
+		status = "okay";
+		spi-max-frequency = <50000000>;
+		rotate = <270>;
+		bgr;
+		fps = <30>;
+		buswidth = <8>;
+		reset-gpios = <&pio 6 8 GPIO_ACTIVE_LOW>; //PG8
+		dc-gpios = <&pio 0 1 GPIO_ACTIVE_HIGH>;//PA1
+		debug = <0>;
+		backlight = <&backlight>;
+	};
+
+	tsc2046@1 {
+		reg = <1>;	/* CS1 */
+		compatible = "ti,tsc2046";
+		interrupt-parent = <&pio>;
+		interrupts = <0 2 IRQ_TYPE_LEVEL_LOW>;	//PA2
+		spi-max-frequency = <1000000>;
+		pendown-gpio = <&pio 0 2 GPIO_ACTIVE_LOW>;
+		vcc-supply = <&reg_vcc3v3>;
+
+		ti,x-min = /bits/ 16 <0>;
+		ti,x-max = /bits/ 16 <320>;
+		ti,y-min = /bits/ 16 <0>;
+		ti,y-max = /bits/ 16 <240>;
+		ti,x-plate-ohms = /bits/ 16 <40>;
+		ti,pressure-max = /bits/ 16 <255>;
+
+		wakeup-source;
+	};
+};
+
+&emac {
+	phy-handle = <&int_mii_phy>;
+	phy-mode = "mii";
+	allwinner,leds-active-low;
+	local-mac-address = [a4 51 29 00 00 06];
+	status = "okay";
+};
+
+&ohci0 {
+	status = "okay";
+};
+
+&usb_otg {
+	status = "okay";
+	dr_mode = "peripheral";
+};
+
+&usbphy {
+	usb0_id_det-gpios = <&pio 6 12 GPIO_ACTIVE_HIGH>; /* PG12 */
+};
+
+&pio {
+	spi0_pins: spi0-pins {
+		pins = "PC0", "PC1", "PC2", "PC3";
+		function = "spi0";
+   };
+
+   spi0_pins_cs1: spi0_pins_cs1 {
+		pins = "PC3", "PA3";
+		function = "gpio_out";
+	};
+
+   uart1_pins: uart1-pins {
+		pins = "PG6", "PG7";
+		function = "uart1";
+	};
+};

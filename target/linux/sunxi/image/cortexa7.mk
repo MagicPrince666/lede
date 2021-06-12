@@ -35,6 +35,7 @@ define Device/friendlyarm_nanopi-neo
   DEVICE_VENDOR := FriendlyARM
   DEVICE_MODEL := NanoPi NEO
   SOC := sun8i-h3
+  CONFIG_TARGET_ROOTFS_PARTSIZE := 8000
 endef
 TARGET_DEVICES += friendlyarm_nanopi-neo
 
