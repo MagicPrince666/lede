@@ -80,6 +80,18 @@
 		edma@c080000 {
 			status = "okay";
 		};
+
+		pcie0: pci@40000000 {
+			status = "okay";
+			perst-gpio = <&tlmm 4 GPIO_ACTIVE_LOW>;
+			wake-gpio = <&tlmm 40 GPIO_ACTIVE_LOW>;
+			bridge@0,0 {
+				reg = <0x00000000 0 0 0 0>;
+				#address-cells = <3>;
+				#size-cells = <2>;
+				ranges;
+			};
+		};
 	};
 
 	leds {
@@ -227,21 +239,22 @@
 	};
 };
 
-&pcie0 {
-	status = "okay";
-	pinctrl-0 = <&pcie_pins>;
-	pinctrl-names = "default";
-	perst-gpio = <&tlmm 4 GPIO_ACTIVE_HIGH>;
-	wake-gpio = <&tlmm 40 GPIO_ACTIVE_HIGH>;
+//&pcie0 {
+//	status = "okay";
+//	pinctrl-0 = <&pcie_pins>;
+//	pinctrl-names = "default";
+
+//	perst-gpio = <&tlmm 4 GPIO_ACTIVE_LOW>;
+//	wake-gpio = <&tlmm 40 GPIO_ACTIVE_HIGH>;
 
 	/* Free slot for use */
-	bridge@0,0 {
-		reg = <0x00000000 0 0 0 0>;
-		#address-cells = <3>;
-		#size-cells = <2>;
-		ranges;
-	};
-};
+//	bridge@0,0 {
+//		reg = <0x00000000 0 0 0 0>;
+//		#address-cells = <3>;
+//		#size-cells = <2>;
+//		ranges;
+//	};
+//};
 
 &qpic_bam {
 	status = "okay";
