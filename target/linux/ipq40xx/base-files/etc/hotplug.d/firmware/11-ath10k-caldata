@@ -61,6 +61,7 @@ case "$FIRMWARE" in
 	ezviz,cs-w3-wd1200g-eup |\
 	glinet,gl-b1300 |\
 	glinet,gl-s1300 |\
+	leguang,ca100 |\
 	linksys,ea6350v3 |\
 	p2w,r619ac |\
 	p2w,r619ac-128m |\
@@ -106,7 +107,6 @@ case "$FIRMWARE" in
 	compex,wpj428 |\
 	engenius,eap1300 |\
 	engenius,eap2200 |\
-	hugo,ac1200 |\
 	openmesh,a42 |\
 	openmesh,a62 |\
 	qxwlan,e2600ac-c1 |\
@@ -171,6 +171,7 @@ case "$FIRMWARE" in
 	ezviz,cs-w3-wd1200g-eup |\
 	glinet,gl-b1300 |\
 	glinet,gl-s1300 |\
+	leguang,ca100 |\
 	linksys,ea6350v3 |\
 	p2w,r619ac |\
 	p2w,r619ac-128m |\
@@ -214,7 +215,6 @@ case "$FIRMWARE" in
 	compex,wpj419 |\
 	compex,wpj428 |\
 	engenius,eap1300 |\
-	hugo,ac1200 |\
 	engenius,eap2200 |\
 	openmesh,a42 |\
 	openmesh,a62 |\
