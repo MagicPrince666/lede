@@ -8,18 +8,21 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=linux-firmware
-PKG_VERSION:=20221012
+PKG_VERSION:=20230310
 PKG_RELEASE:=1
 
 PKG_SOURCE_URL:=@KERNEL/linux/kernel/firmware
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
-PKG_HASH:=e9d174af729511c8cccb60ec4e0b223b3c44b67d813b42d1ab9813acfa667fa5
+PKG_HASH:=5968d4e5178ca1ecad3c41c36bba4602c288f25c7a48eeaa74113537578199b2
 
 PKG_MAINTAINER:=Felix Fietkau <nbd@nbd.name>
 
 SCAN_DEPS = *.mk
 
 include $(INCLUDE_DIR)/package.mk
+
+RSTRIP:=:
+STRIP:=:
 
 define Package/firmware-default
   SECTION:=firmware
