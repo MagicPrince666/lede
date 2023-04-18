@@ -850,9 +850,12 @@ endef
 TARGET_DEVICES += zbtlink_zbt-we1226
 
 define Device/zbtlink_zbt-we2126
-  IMAGE_SIZE := 7872k
+  SOC := mt7628an
+  IMAGE_SIZE := 16064k
   DEVICE_VENDOR := Zbtlink
   DEVICE_MODEL := ZBT-WE2126
+  DEVICE_VARIANT := 16M
+  SUPPORTED_DEVICES += zbt-we2126
 endef
 TARGET_DEVICES += zbtlink_zbt-we2126
 
