@@ -849,6 +849,13 @@ define Device/zbtlink_zbt-we1226
 endef
 TARGET_DEVICES += zbtlink_zbt-we1226
 
+define Device/zbtlink_zbt-we2126
+  IMAGE_SIZE := 7872k
+  DEVICE_VENDOR := Zbtlink
+  DEVICE_MODEL := ZBT-WE2126
+endef
+TARGET_DEVICES += zbtlink_zbt-we2126
+
 define Device/zyxel_keenetic-extra-ii
   IMAGE_SIZE := 14912k
   BLOCKSIZE := 64k
