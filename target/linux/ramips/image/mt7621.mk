@@ -179,6 +179,12 @@ define Build/zytrx-header
 	mv $@.new $@
 endef
 
+define Build/h3c-blank-header
+	dd if=/dev/zero of=$@.blank bs=160 count=1
+	cat $@ >> $@.blank
+	mv $@.blank $@
+endef
+
 define Device/dsa-migration
   DEVICE_COMPAT_VERSION := 1.1
   DEVICE_COMPAT_MESSAGE := Config cannot be migrated from swconfig to DSA
