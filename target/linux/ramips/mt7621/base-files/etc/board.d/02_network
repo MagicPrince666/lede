@@ -18,6 +18,9 @@ ramips_setup_interfaces()
 	tplink,re500-v1|\
 	tplink,re650-v1|\
 	ubnt,unifi-6-lite|\
+	h3c,tx1800-plus|\
+	h3c,tx1801-plus|\
+	h3c,tx1806|\
 	ubnt,unifi-nanohd)
 		ucidef_set_interface_lan "lan"
 		;;

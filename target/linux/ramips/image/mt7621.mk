@@ -1998,8 +1998,32 @@ define Device/zte_e8820s
 endef
 TARGET_DEVICES += zte_e8820s
 
+define Device/h3c_tx180x
+  $(Device/nand)
+  KERNEL_SIZE := 8192k
+  IMAGE_SIZE := 120832k
+  KERNEL_LOADADDR := 0x82000000
+  KERNEL_INITRAMFS := kernel-bin | relocate-kernel $(loadaddr-y) | lzma | \
+	fit lzma $$(KDIR)/image-$$(firstword $$(DEVICE_DTS)).dtb
+  KERNEL := $$(KERNEL_INITRAMFS) | h3c-blank-header
+  DEVICE_VENDOR := H3C
+  DEVICE_PACKAGES := kmod-mt7915-firmware
+endef
+
+define Device/h3c_tx1800-plus
+  $(Device/h3c_tx180x)
+  DEVICE_MODEL := TX1800 Plus
+endef
+TARGET_DEVICES += h3c_tx1800-plus
+
 define Device/h3c_tx1801-plus
   $(Device/h3c_tx180x)
   DEVICE_MODEL := TX1801 Plus
 endef
 TARGET_DEVICES += h3c_tx1801-plus
+
+define Device/h3c_tx1806
+  $(Device/h3c_tx180x)
+  DEVICE_MODEL := TX1806
+endef
+TARGET_DEVICES += h3c_tx1806
