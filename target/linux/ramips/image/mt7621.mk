@@ -1997,3 +1997,9 @@ define Device/zte_e8820s
 	kmod-usb-ledtrig-usbport luci-app-mtwifi -wpad-openssl
 endef
 TARGET_DEVICES += zte_e8820s
+
+define Device/h3c_tx1801-plus
+  $(Device/h3c_tx180x)
+  DEVICE_MODEL := TX1801 Plus
+endef
+TARGET_DEVICES += h3c_tx1801-plus
